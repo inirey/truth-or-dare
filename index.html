@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truth Or Dare | Tata Surya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hitam: '#080808',
+                        gelap: '#121212',
+                        abu: '#888888',
+                        'abu-terang': '#cccccc',
+                        putih: '#f5f5f5',
+                    },
+                    animation: {
+                        'muncul': 'muncul 0.4s ease-out forwards',
+                        'getar-kecil': 'getarKecil 0.4s ease-in-out',
+                        'berkedip': 'berkedip 4s ease-in-out infinite alternate',
+                        'orbit-merkurius': 'orbit 18s linear infinite',
+                        'orbit-venus': 'orbit 24s linear infinite',
+                        'orbit-bumi': 'orbit 32s linear infinite',
+                        'orbit-mars': 'orbit 42s linear infinite',
+                        'orbit-jupiter': 'orbit 65s linear infinite',
+                        'orbit-saturnus': 'orbit 85s linear infinite',
+                        'orbit-uranus': 'orbit 105s linear infinite',
+                        'orbit-neptunus': 'orbit 130s linear infinite',
+                    },
+                    keyframes: {
+                        muncul: {
+                            '0%': { transform: 'scale(0.9)', opacity: 0 },
+                            '100%': { transform: 'scale(1)', opacity: 1 },
+                        },
+                        getarKecil: {
+                            '0%, 100%': { transform: 'rotate(0deg)' },
+                            '25%': { transform: 'rotate(-2deg)' },
+                            '75%': { transform: 'rotate(2deg)' },
+                        },
+                        berkedip: {
+                            '0%': { opacity: 0.2 },
+                            '100%': { opacity: 0.8 },
+                        },
+                        orbit: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .garis-abu { border: 1px solid #333333; }
+            .bayangan-halus { box-shadow: 0 0 20px rgba(255,255,255,0.05); }
+            .orbit-jalur { position: absolute; border: 1px solid rgba(255,255,255,0.05); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+            .planet { position: absolute; border-radius: 50%; opacity: 0.6; }
+            .cincin-saturnus { position: absolute; border: 2px solid rgba(218,165,32,0.3); border-radius: 50%; transform: rotateX(75deg); }
+        }
+        body {
+            background-color: #080808;
+            overflow-x: hidden;
+        }
+
+        /* Efek Bintang Jatuh */
+        .bintang-jatuh {
+            position: absolute;
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.7));
+            transform: rotate(-45deg);
+            animation: jatuh 7s linear infinite;
+            opacity: 0;
+        }
+        @keyframes jatuh {
+            0% { transform: translate(-150px, -150px) rotate(-45deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translate(200px, 200px) rotate(-45deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-putih relative">
+    <!-- Latar Bintang -->
+    <div id="bintang" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+    <!-- Efek Bintang Jatuh -->
+    <div id="meteor" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+    <!-- SISTEM TATA SURYA BERGERAK -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <!-- Jalur Orbit -->
+        <div class="orbit-jalur w-[180px] h-[180px]"></div>
+        <div class="orbit-jalur w-[260px] h-[260px]"></div>
+        <div class="orbit-jalur w-[340px] h-[340px]"></div>
+        <div class="orbit-jalur w-[420px] h-[420px]"></div>
+        <div class="orbit-jalur w-[540px] h-[540px]"></div>
+        <div class="orbit-jalur w-[660px] h-[660px]"></div>
+        <div class="orbit-jalur w-[780px] h-[780px]"></div>
+        <div class="orbit-jalur w-[900px] h-[900px]"></div>
+
+        <!-- Merkurius -->
+        <div class="absolute animate-orbit-merkurius w-[90px] h-[90px]">
+            <div class="planet w-2 h-2 bg-gradient-to-br from-gray-500 to-gray-700 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+
+        <!-- Venus -->
+        <div class="absolute animate-orbit-venus w-[130px] h-[130px]">
+            <div class="planet w-4 h-4 bg-gradient-to-br from-yellow-700 to-orange-800 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+
+        <!-- Bumi -->
+        <div class="absolute animate-orbit-bumi w-[170px] h-[170px]">
+            <div class="planet w-[18px] h-[18px] bg-gradient-to-br from-blue-700 via-green-700 to-blue-900 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+
+        <!-- Mars -->
+        <div class="absolute animate-orbit-mars w-[210px] h-[210px]">
+            <div class="planet w-3 h-3 bg-gradient-to-br from-red-700 to-red-900 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+
+        <!-- Jupiter -->
+        <div class="absolute animate-orbit-jupiter w-[270px] h-[270px]">
+            <div class="planet w-8 h-8 bg-gradient-to-br from-orange-600 via-amber-700 to-red-800 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+
+        <!-- Saturnus -->
+        <div class="absolute animate-orbit-saturnus w-[330px] h-[330px]">
+            <div class="planet w-7 h-7 bg-gradient-to-br from-yellow-600 via-yellow-800 to-amber-900 top-0 left-1/2 -translate-x-1/2 relative">
+                <div class="cincin-saturnus w-[26px] h-[6px] -left-[4px] top-[10px]"></div>
+            </div>
+        </div>
+
+        <!-- Uranus -->
+        <div class="absolute animate-orbit-uranus w-[390px] h-[390px]">
+            <div class="planet w-5 h-5 bg-gradient-to-br from-cyan-400 to-teal-700 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+
+        <!-- Neptunus -->
+        <div class="absolute animate-orbit-neptunus w-[450px] h-[450px]">
+            <div class="planet w-[19px] h-[19px] bg-gradient-to-br from-blue-500 to-indigo-900 top-0 left-1/2 -translate-x-1/2"></div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-10 relative z-10">
+        <!-- Judul -->
+        <div class="text-center mb-12">
+            <h1 class="text-[clamp(2.2rem,7vw,4rem)] font-bold text-putih mb-2">TRUTH OR DARE</h1>
+            <p class="text-abu text-lg">Jelajahi tantangan di antara planet</p>
+        </div>
+
+        <!-- Kotak Hasil -->
+        <div id="kotakHasil" class="w-full max-w-xl mx-auto min-h-[180px] flex flex-col items-center justify-center p-8 rounded-xl garis-abu bayangan-halus mb-10 opacity-0 bg-gelap/50 backdrop-blur-md">
+            <div id="jenisHasil" class="text-xl font-semibold mb-4 text-abu-terang"></div>
+            <div id="teksHasil" class="text-lg text-center text-abu-terang leading-relaxed"></div>
+        </div>
+
+        <!-- Tombol -->
+        <div class="text-center">
+            <button id="tombolAcak" class="px-10 py-4 garis-abu rounded-xl text-putih font-medium text-lg transition-all duration-300 hover:bg-putih/5 hover:border-abu-terang">
+                <i class="fa fa-random mr-2"></i>
+                ACAK SEKARANG
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-16 text-center text-abu text-sm">
+            <p>© 2026 Wibuzone Project • Made With By Rinz ♥️</p>
+        </div>
+    </div>
+
+    <script>
+        // Daftar Pertanyaan & Tantangan
+        const truths = [
+            "Apa rahasia terbesar yang belum pernah kamu ceritakan ke siapapun?",
+            "Kapan terakhir kali kamu berbohong, dan apa alasannya?",
+            "Apa hal paling memalukan yang pernah kamu lakukan di depan umum?",
+            "Siapa orang yang paling kamu sukai di ruangan ini?",
+            "Apa ketakutan terbesarmu yang tidak banyak orang tahu?",
+            "Jika kamu bisa berkunjung ke salah satu planet ini, mana yang kamu pilih?",
+            "Apa hal paling aneh yang pernah kamu beli?",
+            "Siapa orang yang paling berpengaruh dalam hidupmu?",
+            "Apa kebiasaan buruk yang kamu coba perbaiki?",
+            "Apa hal yang paling kamu syukuri saat ini?"
+        ];
+
+        const dares = [
+            "Lakukan tarian sederhana selama 20 detik tanpa musik!",
+            "Bisikkan satu kata yang mendalam ke telinga orang di sebelahmu!",
+            "Ceritakan satu hal unik tentang dirimu yang jarang orang tahu!",
+            "Nyanyikan potongan lagu kesukaanmu dengan suara pelan!",
+            "Pujilah setiap orang yang ada di ruangan ini satu per satu!",
+            "Tunjukkan foto favoritmu di galeri HP kamu!",
+            "Lakukan gerakan melayang seperti astronot di ruang angkasa!",
+            "Peluk orang di sebelahmu dengan sopan selama 5 detik!",
+            "Ceritakan satu pengalaman lucu yang pernah kamu alami!",
+            "Tutup matamu dan tebak siapa yang menyentuh bahumu!"
+        ];
+
+        const tombolAcak = document.getElementById('tombolAcak');
+        const kotakHasil = document.getElementById('kotakHasil');
+        const jenisHasil = document.getElementById('jenisHasil');
+        const teksHasil = document.getElementById('teksHasil');
+        const wadahBintang = document.getElementById('bintang');
+        const wadahMeteor = document.getElementById('meteor');
+
+        // Buat bintang latar
+        for(let i = 0; i < 150; i++) {
+            const bintang = document.createElement('div');
+            bintang.style.position = 'absolute';
+            bintang.style.left = `${Math.random() * 100}%`;
+            bintang.style.top = `${Math.random() * 100}%`;
+            const ukuran = Math.random() * 2 + 1;
+            bintang.style.width = `${ukuran}px`;
+            bintang.style.height = `${ukuran}px`;
+            bintang.style.backgroundColor = '#ffffff';
+            bintang.style.borderRadius = '50%';
+            bintang.style.opacity = Math.random() * 0.5 + 0.1;
+            bintang.style.animation = `berkedip ${Math.random() * 4 + 2}s ease-in-out infinite alternate`;
+            wadahBintang.appendChild(bintang);
+        }
+
+        // Buat bintang jatuh
+        function buatBintangJatuh() {
+            const meteor = document.createElement('div');
+            meteor.classList.add('bintang-jatuh');
+            meteor.style.left = `${Math.random() * 100}%`;
+            meteor.style.animationDelay = `${Math.random() * 7}s`;
+            wadahMeteor.appendChild(meteor);
+            setTimeout(() => meteor.remove(), 7000);
+        }
+        setInterval(buatBintangJatuh, 1500);
+
+        // Fungsi Acak
+        tombolAcak.addEventListener('click', () => {
+            tombolAcak.classList.add('animate-getar-kecil');
+            kotakHasil.classList.remove('animate-muncul');
+            kotakHasil.style.opacity = 0;
+
+            setTimeout(() => {
+                tombolAcak.classList.remove('animate-getar-kecil');
+                
+                const adalahTruth = Math.random() > 0.5;
+                let teksJenis, teksIsi;
+
+                if(adalahTruth) {
+                    teksJenis = "— TRUTH —";
+                    teksIsi = truths[Math.floor(Math.random() * truths.length)];
+                } else {
+                    teksJenis = "— DARE —";
+                    teksIsi = dares[Math.floor(Math.random() * dares.length)];
+                }
+
+                jenisHasil.textContent = teksJenis;
+                teksHasil.textContent = teksIsi;
+                kotakHasil.classList.add('animate-muncul');
+                kotakHasil.style.opacity = 1;
+            }, 400);
+        });
+    </script>
+</body>
+</html>
